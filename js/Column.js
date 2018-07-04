@@ -23,7 +23,7 @@ function Column(id, name) {
 				.then(function(resp){
 					var card = new Card(resp.id, cardName);
 					self.addCard(card)
-				});
+				})
 		}
 	});
 }
@@ -34,22 +34,21 @@ Column.prototype = {
 	},
 	removeColumn: function() {
 		var self = this;
-		fetch(baseUrl + '/column/' + self.id, {method: 'DELETE', headers: myHeaders})
+		fetch(baseUrl + '/column/' + this.id, {method: 'DELETE', headers: myHeaders})
 			.then(function(resp) {
 				return resp.json();
 			})
 			.then(function(resp){
 				self.element.parentNode.removeChild(self.element);
-			});
+			})
 	},
 	editColumn: function() {
 		var self = this;
 		var newColumnName = prompt('Enter the new name of the column');
-		event.preventDefault();
 		var data = new FormData();
 		data.append('name', newColumnName);
-		data.append('id', self.id);
-		fetch(baseUrl + '/column/' + self.id, {method: 'PUT', headers: myHeaders, body: data})
+		data.append('id', this.id);
+		fetch(baseUrl + '/column/' + this.id, {method: 'PUT', headers: myHeaders, body: data})
 			.then(function(resp){
 				return resp.json();
 			})

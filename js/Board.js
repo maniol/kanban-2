@@ -1,8 +1,8 @@
 var board = {
 	name: 'Tablica Kanban',
 	addColumn: function(column) {
-		this.element.appendChild(column.element);
-		initSortable(column.id); //About this feature we will tell later
+	this.element.appendChild(column.element);
+	initSortable(column.id); //About this feature we will tell later
 	},
 	element: document.querySelector('#board .column-container')
 };
@@ -25,18 +25,19 @@ function initSortable(id) {
 	var el = document.getElementById(id);
 	var sortable = Sortable.create(el, {
 		group: 'kanban',
-		sort: true
-    /*onMove: function(evt) {
-      console.log(evt)
-      /*var newColumnId = evt.to.id;
-      var cardId = evt???
-      var data = new FormData();
-      data.append('id', cardId);
-      data.append('name', cardName);
-      data.append('bootcamp_kanban_column_id': newColumnId);
-      fetch(baseUrl + '/card/' + cardId, {method: 'PUT', headers: myHeaders, body: data})
-        .then(function(resp){
-          return resp.json();
-        })*/
-  });
+		sort: true,
+		onEnd: function(event) {
+			var newColumnId = event.to.id;
+			var cardId = event.item.id;
+			var cardName = event.item.querySelector('.card-description').innerHTML;
+			var data = new FormData();
+			data.append('id', cardId);
+			data.append('name', cardName);
+			data.append('bootcamp_kanban_column_id', newColumnId);
+			fetch(baseUrl + '/card/' + cardId, {method: 'PUT', headers: myHeaders, body: data})
+				.then(function(resp){
+					return resp.json();
+				})
+		}
+	});
 }
